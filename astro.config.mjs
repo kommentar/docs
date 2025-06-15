@@ -4,8 +4,9 @@ import { sidebar } from "./src/astro.sidebar";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://docs.kommentar.safwanyp.com",
-  trailingSlash: "always",
+  site: "https://kommentar.safwanyp.com",
+  base: "/docs",
+  trailingSlash: "never",
   integrations: [
     starlight({
       title: "Kommentar",

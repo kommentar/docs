@@ -3,7 +3,7 @@ title: Architecture
 description: Kommentar's architecture and patterns
 ---
 
-If you haven't already, I recommend reading the [Definitions](/inner-workings/01-definitions/) page to understand the architecture and patterns used in Kommentar.
+If you haven't already, I recommend reading the [Definitions](/docs/inner-workings/01-definitions/) page to understand the architecture and patterns used in Kommentar.
 
 ## Project Structure
 

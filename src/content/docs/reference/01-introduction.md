@@ -5,8 +5,8 @@ description: Introduction to the API
 
 The API exposes 4 simple endpoints:
 
-- `GET /comments/:hostId` to fetch all comments for a [**Host**](/reference/02-core-concepts/#host)
-- `POST /comments/:hostId` to create a comment for a [**Host**](/reference/02-core-concepts/#host)
+- `GET /comments/:hostId` to fetch all comments for a [**Host**](/docs/reference/02-core-concepts/#host)
+- `POST /comments/:hostId` to create a comment for a [**Host**](/docs/reference/02-core-concepts/#host)
 - `PUT /comments/:id` to modify a comment
 - `DELETE /comments/:id` to delete a comment
 
