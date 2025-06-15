@@ -10,9 +10,13 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Kommentar",
-      social: {
-        github: "https://github.com/kommentar",
-      },
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/kommentar",
+        },
+      ],
       sidebar,
     }),
   ],
