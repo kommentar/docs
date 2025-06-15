@@ -8,6 +8,9 @@ dependencies:
   "@astrojs/starlight":
     specifier: ^0.34.4
     version: 0.34.4(astro@5.9.3)
+  "@catppuccin/starlight":
+    specifier: ^1.0.1
+    version: 1.0.1(@astrojs/starlight@0.34.4)(astro@5.9.3)
   astro:
     specifier: ^5.9.3
     version: 5.9.3(@types/node@17.0.45)(typescript@5.7.2)
@@ -285,6 +288,19 @@ packages:
       fontkit: 2.0.4
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@catppuccin/starlight@1.0.1(@astrojs/starlight@0.34.4)(astro@5.9.3):
+    resolution:
+      {
+        integrity: sha512-jBNMYSBkyFGrI0pJRDfOL26HyIuDIWrqfACxbvI4/xw0jLNColXjYw3i+HBeS2bC+UcJqJtRqsrcxqDb31TcBg==,
+      }
+    peerDependencies:
+      "@astrojs/starlight": ">=0.32"
+      astro: ^5.0.0
+    dependencies:
+      "@astrojs/starlight": 0.34.4(astro@5.9.3)
+      astro: 5.9.3(@types/node@17.0.45)(typescript@5.7.2)
     dev: false
 
   /@commitlint/cli@19.6.0(@types/node@17.0.45)(typescript@5.7.2):
