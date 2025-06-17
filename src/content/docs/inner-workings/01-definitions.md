@@ -33,7 +33,7 @@ This separation allows for better scalability and performance, as read and write
 
 ## Policies
 
-Kommentar also uses something called "Policies" to handle some functionality.
+Kommentar also uses something called **Policies** to handle some functionality.
 
 Policies can be considered as event handlers that are triggered by certain events in the application.
 
