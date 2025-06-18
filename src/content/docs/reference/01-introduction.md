@@ -3,12 +3,15 @@ title: Introduction
 description: Introduction to the API
 ---
 
-The API exposes 4 simple endpoints:
+The API exposes 5 simple endpoints:
 
-- `GET /comments/:hostId` to fetch all comments for a [**Host**](/docs/reference/02-core-concepts#host)
-- `POST /comments/:hostId` to create a comment for a [**Host**](/docs/reference/02-core-concepts#host)
-- `PUT /comments/:id` to modify a comment
-- `DELETE /comments/:id` to delete a comment
+- `GET /hosts/{hostId}/comments` to fetch all comments for a [**Host**](/docs/reference/02-core-concepts#host)
+- `POST /hosts/{hostId}/comments` to create a comment for a [**Host**](/docs/reference/02-core-concepts#host)
+- `PUT /hosts/{hostId}/comments/{id}` to modify a [**Comment**](/docs/reference/02-core-concepts#comment)
+- `DELETE /hosts/{hostId}/comments/{id}` to delete a [**Comment**](/docs/reference/02-core-concepts#comment)
+- `GET /consumers/{id}` to fetch a [**Consumer**](/docs/reference/02-core-concepts#consumer)
+
+Read more about these endpoints in the [HTTP API](/docs/reference/04-http-api) section.
 
 The application code adheres to the Ports and Adapters pattern, along with Command-Query Responsibility segregation.
 It might seem overkill, but this helps in modifying the app to use whatever technologies you want with minimal effort.

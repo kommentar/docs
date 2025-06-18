@@ -10,7 +10,11 @@ export const sidebar = [
     autogenerate: { directory: "reference" },
   },
   {
-    label: "Inner Workings",
-    autogenerate: { directory: "inner-workings" },
+    label: "Deploy",
+    autogenerate: { directory: "deploy" },
+  },
+  {
+    label: "Under the Hood",
+    autogenerate: { directory: "under-the-hood" },
   },
 ] satisfies StarlightUserConfig["sidebar"];

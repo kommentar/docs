@@ -1,0 +1,111 @@
+---
+title: Self Hosting
+description: Guides on self hosting Kommentar.
+---
+
+import { Steps } from "@astrojs/starlight/components";
+import { Badge } from "@astrojs/starlight/components";
+
+Kommentar is built to be self-hostable first and foremost. Running Kommentar on your own server gives you full control over your data and the environment.
+
+As long as you do not change anything in the database schema, or the code, Kommentar can be upgraded without data loss.
+
+This guide is split into two sections:
+
+1. Getting Kommentar up and running on your server ([Setup with Docker](#setup-with-docker))
+2. Upgrading Kommentar ([Upgrading](#upgrading))
+
+## Setup with Docker
+
+Kommentar can be setup on any server easily using Docker. This is the recommended way to run Kommentar in production.
+
+:::note
+As of writing this documentation _**(June 18, 2025)**_, Kommentar is not yet published to any cotnainer registry, such as Docker Hub. This means that until publishes are available, you will need to build the Kommentar Docker image yourself from the source code.
+
+That being said, I plan to start publishing Kommentar to GHCR (GitHub Container Registry) in the very near future, so you will be able to pull the image directly from there. Stay tuned for updates on this!
+:::
+
+### Prerequisites
+
+- Docker installed on your server. Instructions can be found in Docker's [official documentation](https://docs.docker.com/engine/install/).
+- Docker Compose installed on your server, if you choose to use it. It's what I personally recommend. You can find instructions in Docker's [official documentation](https://docs.docker.com/compose/install/).
+- A valid `.env` file in the root directory of the Kommentar repository. This file contains environment variables that Kommentar needs to run. You can find an example `.env.example` file in the repository, which you can copy and rename to `.env`.
+
+### With Docker Compose <Badge text="Recommended" variant="success" size="medium" />
+
+You can use the provided `docker-compose.yaml` file to run Kommentar with Docker Compose. This file is located in the root directory of the Kommentar repository.
+
+```bash
+docker-compose up -d
+# OR
+docker compose up -d
+```
+
+This command will start Kommentar in detached mode, meaning it will run in the background.
+
+You can then access Kommentar at `http://localhost:3000` or the IP address of your server.
+
+### Without Docker Compose
+
+If you prefer to run Kommentar without Docker Compose, you can do the following:
+
+<Steps>
+
+1. Build the Docker image:
+
+   ```bash
+   docker build -t kommentar .
+   ```
+
+2. Run the Kommentar container:
+
+   ```bash
+   docker run -d --env-file .env --name kommentar -p 3000:3000 kommentar
+   ```
+
+</Steps>
+
+Setting up Kommentar for public access requires an additional step of configuring a reverse proxy, such as Nginx or Traefik, to handle incoming requests and route them to the Kommentar container.
+
+This is not covered in this guide, but you can find many resources online on how to set up a reverse proxy. Some popular options include:
+
+- [Nginx](https://www.nginx.com/)
+- [Traefik](https://traefik.io/)
+- [Caddy](https://caddyserver.com/)
+
+## Upgrading
+
+Upgrading Kommentar is straightforward as long as you do not change the database schema or the code.
+
+To upgrade Kommentar, you can follow these steps:
+
+<Steps>
+
+1. Pull the latest changes:
+
+   ```bash
+   git pull
+   ```
+
+2. Rerun while forcing a rebuild:
+
+   If you are using Docker Compose:
+
+   ```bash
+   docker-compose up -d --build
+   # OR
+   docker compose up -d --build
+   ```
+
+   If you are not using Docker Compose, you can rebuild the image and restart the container:
+
+   ```bash
+   docker build -t kommentar .
+   docker stop kommentar
+   docker rm kommentar
+   docker run -d --env-file .env --name kommentar -p 3000:3000 kommentar
+   ```
+
+3. Verify that Kommentar is running by accessing it at `http://localhost:3000` or the IP address of your server.
+
+</Steps>

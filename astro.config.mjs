@@ -37,7 +37,6 @@ export default defineConfig({
     syntaxHighlight: "shiki",
     shikiConfig: {
       theme: "one-dark-pro",
-      langs: ["javascript", "typescript"],
     },
     rehypePlugins: [
       [
