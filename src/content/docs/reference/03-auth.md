@@ -79,7 +79,7 @@ This also means that for the first two [**Hosts**](/docs/reference/02-core-conce
 
 Kommentar leverages the concept of user sessions, but it does not handle validation or management of these sessions.
 
-The idea is that Kommentar will provide a way to associate a user session with a [**Comment**](/docs/reference/02-core-concepts#comment) when the comment is posted. This allows you to track which user made which comment, without Kommentar having to manage user sessions itself. There are drawbacks to this approach for sure, but it is a trade-off that I am willing to make for now. If enough people ask for a better solution, I will consider implementing a more robust user session management system.
+The idea is that Kommentar will provide a way to associate a user session with a [**Comment**](/docs/reference/02-core-concepts#comment) when the comment is posted. This allows you to track which user made which comment, without Kommentar having to manage user sessions itself. There are drawbacks to this approach for sure, but it is a trade-off that I am willing to make for now. If enough people ask for a better solution, I will consider implementing a more robust system, but nothing to the extreme of a full-fledged user management system.
 
 The user session in Kommentar is expected to be a `string`. No other enforcements are made on the format of the session ID. It is up to you to ensure that the session ID is unique and valid.
 
