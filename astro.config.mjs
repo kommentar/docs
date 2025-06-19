@@ -22,6 +22,11 @@ export default defineConfig({
           },
         }),
       ],
+      pagefind: {
+        ranking: {
+          termSimilarity: 20,
+        },
+      },
       title: "Kommentar",
       social: [
         {
