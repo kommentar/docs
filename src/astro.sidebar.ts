@@ -6,12 +6,12 @@ export const sidebar = [
     slug: "getting-started",
   },
   {
-    label: "Reference",
-    autogenerate: { directory: "reference" },
-  },
-  {
     label: "Deploy",
     autogenerate: { directory: "deploy" },
+  },
+  {
+    label: "Reference",
+    autogenerate: { directory: "reference" },
   },
   {
     label: "Under the Hood",
