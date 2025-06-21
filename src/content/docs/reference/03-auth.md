@@ -12,6 +12,7 @@ This part of the documentation will explain how Kommentar handles things like:
 - Authentication of [**Consumers**](/docs/reference/02-core-concepts#consumer)
 - Authorization of [**Consumers**](/docs/reference/02-core-concepts#consumer)
 - User sessions
+- Admin/Superuser access
 
 ## Authentication
 
@@ -90,3 +91,16 @@ When a new [**Comment**](/docs/reference/02-core-concepts#comment) is created, t
 When updating or deleting a [**Comment**](/docs/reference/02-core-concepts#comment), the session ID is also passed in the cookie header. Kommentar will then check if the session ID matches the one associated with the [**Comment**](/docs/reference/02-core-concepts#comment) and allow or deny the request accordingly.
 
 Session IDs are not returned in any of the API responses to ensure that they are not exposed to the client. This is to prevent any potential security issues that could arise from exposing session IDs in the API responses. This does mean that you (a user of Kommentar) will have to use your own session management system to handle user sessions and ensure that the session ID is valid.
+
+## Admin/Superuser Access
+
+Kommentar has some operations that are reserved for admin or superuser access. These operations are available in the HTTP API, but they require specific headers to be set in the request.
+
+These headers are:
+
+- `X-Admin-Key`: The admin key that is used to authenticate the request.
+- `X-Admin-Secret`: The admin secret that is used to authenticate the request.
+
+These headers are not required for regular operations, and they are only used for admin operations. The admin key and secret are not stored in the database, and they are not exposed in any of the API responses.
+
+The admin key and secret are stored as environment variables for now. This might change in the future, but for now this is the simplest way to handle admin access.

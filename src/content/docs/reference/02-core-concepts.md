@@ -67,7 +67,7 @@ Kommentar does not require you to authenticate users. As a commenting system tha
 ```typescript
 type Commenter = {
   displayName: string;
-  realName?: string;
+  realName: string;
 };
 ```
 
@@ -89,13 +89,19 @@ This is done using an API key and secret that you can generate for each **Consum
 type Consumer = {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   apiKey: string;
   apiSecret: string;
   allowedHosts: string[] | [];
   isActive: boolean;
-  rateLimit?: number;
+  rateLimit: number; // The number of requests allowed per minute
 };
 ```
 
 You can look at the actual definition in the code [here](https://github.com/kommentar/kommentar/blob/main/src/app/domain/entities/consumer.ts).
+
+## Super
+
+A **Super** is essentially an admin user of the Kommentar application. It bypasses all restrictions and has access to all the data in the application.
+
+Tehcnically speaking, a **Super** is not a domain entity in Kommentar. It's more of a user that has superuser privileges in the application.

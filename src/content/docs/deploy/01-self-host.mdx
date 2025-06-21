@@ -43,6 +43,8 @@ That being said, I plan to start publishing Kommentar to GHCR (GitHub Container 
 
 ### With Docker Compose <Badge text="Recommended" variant="success" size="medium" />
 
+#### Setup
+
 You can use the provided `docker-compose.yaml` file to run Kommentar with Docker Compose. This file is located in the root directory of the Kommentar repository.
 
 ```bash
@@ -55,7 +57,57 @@ This command will start Kommentar in detached mode, meaning it will run in the b
 
 You can then access Kommentar at `http://localhost:3000` or the IP address of your server.
 
+#### Post Setup
+
+Verify that the Kommentar container is running:
+
+```bash
+docker ps
+```
+
+You should see a container named `kommentar-app-1` or similar, depending on your Docker Compose configuration.
+
+Now is a good time to set up the admin user for Kommentar. You can do this by following these steps:
+
+<Steps>
+
+1. Run the Kommentar `setup:admin` script to create the admin user:
+
+   ```bash
+   docker exec -it kommentar-app-1 pnpm setup:admin
+   ```
+
+   This will generate all the credentials for the admin user. The output will look like this:
+
+   ```
+   🔐 Admin credentials generated!
+
+   Add these to your environment variables:
+   ADMIN_KEY=km_f0b0633329feb55f43344d92d7361776
+   ADMIN_SECRET_HASH=8162ab4d6fc4c54270634d5bfaf8e2e45835313568b85a23888fb0ecde46a0e8
+
+   ⚠️  IMPORTANT: Save the plain secret below - it won't be shown again!
+   Admin API Secret (plain): 81a6fa20c25747dd3230aac84f0a47a85a25562677e2313471f3e8f9316dd158
+
+
+   🔄 Remember to restart your server after setting the environment variables!
+   ```
+
+2. Copy the values of `ADMIN_KEY` and `ADMIN_SECRET_HASH` to your `.env` file. This is important for the admin user to be able to access Kommentar's API. Make sure to store the **Admin API Secret (plain)** in a secure place, as it will not be shown again, and is needed when sending requests to Kommentar's API.
+
+3. Restart the Kommentar container to apply the changes:
+
+   ```bash
+   docker-compose restart
+   # OR
+   docker compose restart
+   ```
+
+</Steps>
+
 ### Without Docker Compose
+
+#### Setup
 
 If you prefer to run Kommentar without Docker Compose, you can do the following:
 
@@ -70,6 +122,51 @@ If you prefer to run Kommentar without Docker Compose, you can do the following:
 2. Run the Kommentar container:
 
    ```bash
+   docker run -d --env-file .env --name kommentar -p 3000:3000 kommentar
+   ```
+
+</Steps>
+
+#### Post Setup
+
+Verify that the Kommentar container is running:
+
+```bash
+docker ps
+```
+
+You should see a container named `kommentar` or similar, depending on your Docker configuration.
+
+Now is a good time to set up the admin user for Kommentar. You can do this by following these steps:
+
+<Steps>
+
+1. Run the Kommentar `setup:admin` script to create the admin user:
+
+   ```bash
+   docker exec -it kommentar pnpm setup:admin
+   ```
+
+   This will generate all the credentials for the admin user. The output will look like this:
+
+   ```
+   🔐 Admin credentials generated!
+
+   Add these to your environment variables:
+   ADMIN_KEY=km_f0b0633329feb55f43344d92d7361776
+   ADMIN_SECRET_HASH=8162ab4d6fc4c54270634d5bfaf8e2e45835313568b85a23888fb0ecde46a0e8
+
+   ⚠️  IMPORTANT: Save the plain secret below - it won't be shown again!
+   Admin API Secret (plain): 81a6fa20c25747dd3230aac84f0a47a85a25562677e2313471f3e8f9316dd158
+   🔄 Remember to restart your server after setting the environment variables!
+   ```
+
+2. Copy the values of `ADMIN_KEY` and `ADMIN_SECRET_HASH` to your `.env` file. This is important for the admin user to be able to access Kommentar's API. Make sure to store the **Admin API Secret (plain)** in a secure place, as it will not be shown again, and is needed when sending requests to Kommentar's API.
+3. Restart the Kommentar container to apply the changes:
+
+   ```bash
+   docker stop kommentar
+   docker rm kommentar
    docker run -d --env-file .env --name kommentar -p 3000:3000 kommentar
    ```
 

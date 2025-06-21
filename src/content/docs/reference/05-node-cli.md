@@ -20,6 +20,7 @@ The script at it's current state is a simple `.ts` file that uses Node's built-i
 The following scripts are available:
 
 - `pnpm manage`: This script is used to manage the [**Consumer**](/docs/reference/02-core-concepts#consumer)s.
+- `pnpm setup:admin`: This script is used to set up the admin user's API key and secret. This is a one-time setup script that you should run after deploying Kommentar for the first time.
 
 There are other "dev" scripts that I created to help me do some fun stuff, but they don't really provide any value to you as a user of Kommentar. You can find them in the [`package.json`](https://github.com/kommentar/kommentar/tree/main/package.json) file.
 
@@ -43,11 +44,13 @@ There are two ways to execute the scripts in the [Available Scripts](#available-
    The name of the container may be different when you deploy, so make sure to run `docker ps` and use the correct name in place of `kommentar-app-1` if necessary.
    :::
 
-### Script Arguments
+### `pnpm manage`
+
+#### Script Arguments
 
 Each command accepts specific arguments and options:
 
-#### `create <name> [options]`
+##### `create <name> [options]`
 
 Creates a new consumer.
 
@@ -64,7 +67,7 @@ Creates a new consumer.
 pnpm manage create "My Blog" --description "Blog comment system" --hosts "blog.com,www.blog.com" --rate-limit 100
 ```
 
-#### `list` or `ls`
+##### `list` or `ls`
 
 Lists all consumers.
 
@@ -74,7 +77,7 @@ Lists all consumers.
 pnpm manage list
 ```
 
-#### `show <id>`
+##### `show <id>`
 
 Shows details for a specific consumer.
 
@@ -84,7 +87,7 @@ Shows details for a specific consumer.
 pnpm manage show <consumer-id>
 ```
 
-#### `activate <id>`
+##### `activate <id>`
 
 Activates a consumer.
 
@@ -94,7 +97,7 @@ Activates a consumer.
 pnpm manage activate <consumer-id>
 ```
 
-#### `deactivate <id>`
+##### `deactivate <id>`
 
 Deactivates a consumer.
 
@@ -104,7 +107,7 @@ Deactivates a consumer.
 pnpm manage deactivate <consumer-id>
 ```
 
-#### `delete <id>`
+##### `delete <id>`
 
 Deletes a consumer.
 
@@ -113,3 +116,17 @@ Deletes a consumer.
 ```bash
 pnpm manage delete <consumer-id>
 ```
+
+### `pnpm setup:admin`
+
+#### Script Arguments
+
+This script does not accept any arguments. It is a one-time setup script that generates an API key and secret for the admin user.
+
+The script will generate three things:
+
+- An API key for the admin user.
+- A hashed API secret for the admin user.
+- An unhashed API secret for the admin user (this is printed to the console, so make sure to copy it somewhere safe).
+
+The API key and the hashed API secret should be stored in the environment variables under the the keys `ADMIN_KEY` and `ADMIN_SECRET_HASH`, respectively. The unhashed API secret is the one you will need to pass in the `X-Admin-Secret` header when making admin requests to the Kommentar API.
