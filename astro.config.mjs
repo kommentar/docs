@@ -10,6 +10,9 @@ export default defineConfig({
   trailingSlash: "never",
   integrations: [
     starlight({
+      editLink: {
+        baseUrl: "https://github.com/kommentar/docs/edit/main",
+      },
       plugins: [
         catppuccin({
           dark: {
