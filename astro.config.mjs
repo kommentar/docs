@@ -5,7 +5,7 @@ import { sidebar } from "./src/astro.sidebar";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://kommentar.safwanyp.com",
+  site: "https://kommentar.dev",
   base: "/docs",
   trailingSlash: "never",
   integrations: [
