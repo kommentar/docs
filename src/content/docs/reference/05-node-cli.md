@@ -5,7 +5,7 @@ description: Node CLI reference for Kommentar
 
 Kommentar is primarily meant to be consumed via the HTTP API. Any SDKs that are published will also use the HTTP API under the hood.
 
-That being said, I am aware that some functionalities that are available in the code are not exposed via the HTTP API _yet_. The main reason for this is that I have not yet worked out a decent but not-so-complex authorization strategy for these operations.
+That being said, I am aware that some functionalities available in the code are not exposed via the HTTP API _yet_. The main reason for this is that I have not yet worked out a decent but not-so-complex authorization strategy for these operations.
 
 As a middle ground, I have created some scripts in the source code that you can use to execute these operations. The scripts are located in the [`scripts`](https://github.com/kommentar/kommentar/tree/main/scripts) directory, and you can run them using `pnpm`, the package manager used in this project.
 
@@ -22,7 +22,7 @@ The following scripts are available:
 - `pnpm manage`: This script is used to manage the [**Consumer**](/docs/reference/02-core-concepts#consumer)s.
 - `pnpm setup:admin`: This script is used to set up the admin user's API key and secret. This is a one-time setup script that you should run after deploying Kommentar for the first time.
 
-There are other "dev" scripts that I created to help me do some fun stuff, but they don't really provide any value to you as a user of Kommentar. You can find them in the [`package.json`](https://github.com/kommentar/kommentar/tree/main/package.json) file.
+There are other "dev" scripts that I created to help me do some stuff, but they don't really provide any value to you as a user of Kommentar. You can find them in the [`package.json`](https://github.com/kommentar/kommentar/tree/main/package.json) file if you want to have a look.
 
 ## Usage
 
@@ -38,11 +38,11 @@ There are two ways to execute the scripts in the [Available Scripts](#available-
    docker exec -it kommentar-app-1 pnpm manage
    ```
 
-   This will execute the `manage` script inside the Kommentar container. This is helpful if you want to make sure any changes in the database are synced with the container's environment, **especially if your environment for Docker is not the same as your local development environment.**
-
    :::note
    The name of the container may be different when you deploy, so make sure to run `docker ps` and use the correct name in place of `kommentar-app-1` if necessary.
    :::
+
+   This will execute the `manage` script inside the Kommentar container. This is helpful if you want to make sure any changes in the database are synced with the container's environment, **especially if your environment for Docker is not the same as your local development environment.**
 
 ### `pnpm manage`
 

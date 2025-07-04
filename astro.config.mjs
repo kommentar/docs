@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import catppuccin from "@catppuccin/starlight";
 import { sidebar } from "./src/astro.sidebar";
+import rehypeExternalLinks from "rehype-external-links";
 
 // https://astro.build/config
 export default defineConfig({
@@ -48,7 +49,7 @@ export default defineConfig({
     },
     rehypePlugins: [
       [
-        "rehype-external-links",
+        rehypeExternalLinks,
         {
           target: "_blank",
           rel: ["noopener", "noreferrer"],

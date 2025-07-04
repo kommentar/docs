@@ -21,11 +21,11 @@ Consider these examples:
 - On a site like BlueSky, a post is a **Host**.
 - On YouTube, a video is the **Host**.
 
-Essentially, [**Comment**](#comment)s are scoped to a particular entity. This entity is what I prefer to call a **Host**.
+Essentially, [**Comments**](#comment) are scoped to a particular entity. This entity is what I prefer to call a **Host**.
 
 A **Host** is identified by a unique identifier called the `hostId`.
 
-Following the same examples:
+Following the same examples as above:
 
 - On a blog site, the blog post's slug could be the `hostId`
 - On GitHub, the PR number could be the `hostId`
@@ -37,6 +37,8 @@ Like I said earlier, it's nothing crazy. It's a very simple entity.
 ## Comment
 
 A **Comment** is the entity that describes a comment made by a user on a [**Host**](#host).
+
+A **Comment** cannot exist on it's own. It belongs to a [**Host**](#host).
 
 It's defined as an object with some properties that allow you to manage them.
 
@@ -54,15 +56,17 @@ type Comment = {
 
 You can look at the actual definition in the code [here](https://github.com/kommentar/kommentar/blob/main/src/app/domain/entities/comment.ts).
 
-The model of a **Comment** is simple, and I do not expect it to change much in the future. If there are any changes, I will make sure to keep them backwards compatible.
+The model of a **Comment** is simple, and I do not expect it to change much in the future. If there are any changes, I will do my best to keep them backwards compatible.
 
 ## Commenter
 
-A **Commenter** is the entity that describes the user who made a [**Comment**](#comment).
+A **Commenter** is the entity that describes the user who posted a [**Comment**](#comment).
 
 A **Commenter** cannot exist on it's own. It belongs to a [**Comment**](#comment).
 
 Kommentar does not require you to authenticate users. As a commenting system that relies on the [**Host**](#host), I did not see the need to handle authentication in the application itself. If you choose to authenticate users, you can do so in your application and inject the user details into the `Commenter` object.
+
+This does mean that you will need to handle session management yourself. More about this is explained in the [User Sessions](/docs/reference/03-auth#user-sessions) section.
 
 ```typescript
 type Commenter = {
@@ -104,4 +108,6 @@ You can look at the actual definition in the code [here](https://github.com/komm
 
 A **Super** is essentially an admin user of the Kommentar application. It bypasses all restrictions and has access to all the data in the application.
 
-Tehcnically speaking, a **Super** is not a domain entity in Kommentar. It's more of a user that has superuser privileges in the application.
+The terms Super, Superuser, and Admin are synonymous in the context of Kommentar.
+
+Technically speaking, a **Super** is not a domain entity in Kommentar. It's more of a user that has superuser privileges in the application.

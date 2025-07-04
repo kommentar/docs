@@ -6,9 +6,15 @@ description: Guides on self hosting Kommentar.
 import { Steps } from "@astrojs/starlight/components";
 import { Badge } from "@astrojs/starlight/components";
 
-Kommentar is built to be self-hostable first and foremost. Running Kommentar on your own server gives you full control over your data and the environment.
+Kommentar is built to be self-hostable first and foremost. Running Kommentar on your own server gives you full control over your data.
 
 As long as you do not change anything in the database schema, or the code, Kommentar can be upgraded without data loss.
+
+:::note
+As of writing this documentation _**(June 18, 2025)**_, Kommentar is not yet published to any container registry, such as Docker Hub. This means that until published images are available, you will need to build the Kommentar Docker image yourself from the source code. This is not tough by any means, but is an extra step for sure.
+
+That being said, I plan to start publishing Kommentar to GHCR (GitHub Container Registry) in the very near future, so you will be able to pull the image directly from there. Stay tuned for updates on this!
+:::
 
 Before moving forward, make sure you have cloned the Kommentar repository from GitHub:
 
@@ -29,16 +35,10 @@ This guide is split into two sections:
 
 Kommentar can be setup on any server easily using Docker. This is the recommended way to run Kommentar in production.
 
-:::note
-As of writing this documentation _**(June 18, 2025)**_, Kommentar is not yet published to any cotnainer registry, such as Docker Hub. This means that until publishes are available, you will need to build the Kommentar Docker image yourself from the source code.
-
-That being said, I plan to start publishing Kommentar to GHCR (GitHub Container Registry) in the very near future, so you will be able to pull the image directly from there. Stay tuned for updates on this!
-:::
-
 ### Prerequisites
 
-- Docker installed on your server. Instructions can be found in Docker's [official documentation](https://docs.docker.com/engine/install/).
-- Docker Compose installed on your server, if you choose to use it. It's what I personally recommend. You can find instructions in Docker's [official documentation](https://docs.docker.com/compose/install/).
+- Docker installed on your server. Instructions can be found in the Docker [official documentation](https://docs.docker.com/engine/install/).
+- Docker Compose installed on your server, if you choose to use it. **It's what I personally recommend**. You can find instructions in the Docker [official documentation](https://docs.docker.com/compose/install/).
 - A valid `.env` file in the root directory of the Kommentar repository. This file contains environment variables that Kommentar needs to run. You can find an example `.env.example` file in the repository, which you can use as a template to create your own `.env` file.
 
 ### With Docker Compose <Badge text="Recommended" variant="success" size="medium" />
@@ -93,7 +93,7 @@ Now is a good time to set up the admin user for Kommentar. You can do this by fo
    🔄 Remember to restart your server after setting the environment variables!
    ```
 
-2. Copy the values of `ADMIN_KEY` and `ADMIN_SECRET_HASH` to your `.env` file. This is important for the admin user to be able to access Kommentar's API. Make sure to store the **Admin API Secret (plain)** in a secure place, as it will not be shown again, and is needed when sending requests to Kommentar's API.
+2. Copy the values of `ADMIN_KEY` and `ADMIN_SECRET_HASH` to your `.env` file. This is important for the admin user to be able to access the Kommentar API. Make sure to store the value of **Admin API Secret (plain)** in a secure place, as it will not be shown again, and is needed when sending requests to the Kommentar API.
 
 3. Restart the Kommentar container to apply the changes:
 
@@ -212,6 +212,8 @@ To upgrade Kommentar, you can follow these steps:
    docker rm kommentar
    docker run -d --env-file .env --name kommentar -p 3000:3000 kommentar
    ```
+
+   Since Kommentar doesn't ship with it's own data store, there are no additional steps required for upgrading.
 
 3. Verify that Kommentar is running by accessing it at `http://localhost:3000` or the IP address of your server.
 

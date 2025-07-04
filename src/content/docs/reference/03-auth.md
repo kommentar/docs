@@ -7,7 +7,7 @@ The primary goal of Kommentar is to be a commenting system. This means that by d
 
 Kommentar is consumed by other application via an HTTP API, and these applications will more than likely have some form of user management, authentication and authorization. Kommentar does not enforce any specific user management system, but it does provide a way to authenticate users and authorize them to perform certain actions.
 
-This part of the documentation will explain how Kommentar handles things like:
+This part of the documentation will explain how Kommentar handles the following:
 
 - Authentication of [**Consumers**](/docs/reference/02-core-concepts#consumer)
 - Authorization of [**Consumers**](/docs/reference/02-core-concepts#consumer)
@@ -82,7 +82,7 @@ Kommentar leverages the concept of user sessions, but it does not handle validat
 
 The idea is that Kommentar will provide a way to associate a user session with a [**Comment**](/docs/reference/02-core-concepts#comment) when the comment is posted. This allows you to track which user made which comment, without Kommentar having to manage user sessions itself. There are drawbacks to this approach for sure, but it is a trade-off that I am willing to make for now. If enough people ask for a better solution, I will consider implementing a more robust system, but nothing to the extreme of a full-fledged user management system.
 
-The user session in Kommentar is expected to be a `string`. No other enforcements are made on the format of the session ID. It is up to you to ensure that the session ID is unique and valid.
+The user session in Kommentar is expected to be a `string`. No other enforcements are made on the session ID. It is up to you to ensure that the session ID is valid.
 
 ### How the Session ID is used
 
