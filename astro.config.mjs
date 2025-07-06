@@ -6,8 +6,7 @@ import rehypeExternalLinks from "rehype-external-links";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://kommentar.dev",
-  base: "/docs",
+  site: "https://docs.kommentar.dev",
   trailingSlash: "never",
   integrations: [
     starlight({

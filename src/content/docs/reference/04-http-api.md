@@ -12,4 +12,4 @@ To ensure consistency, I will not document the API here. Please use one of the a
 
 You might wonder why there are just 5 endpoints, and that wonder is valid. I plan to add more endpoints soon for some management features. Some of these management features are already implemented in the code, but not exposed via the API yet because I want to figure out a good authorization strategy for these operations first.
 
-That being said, I have tried and included some node scripts in the source code to help you execute these unexposed operations. You can find instructions on how to use them on the [Node CLI](/docs/reference/05-node-cli) page.
+That being said, I have tried and included some node scripts in the source code to help you execute these unexposed operations. You can find instructions on how to use them on the [Node CLI](/reference/05-node-cli) page.

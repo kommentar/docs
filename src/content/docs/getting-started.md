@@ -15,7 +15,7 @@ For now, Kommentar is only the API needed to make comments work. SDKs and unstyl
 
 Since Kommentar is exposed as an HTTP API, you can integrate it into your website/app using any programming language or framework of your choice.
 
-The API reference can be found [here](/docs/reference/04-http-api).
+The API reference can be found [here](/reference/04-http-api).
 
 ## The people behind Kommentar
 

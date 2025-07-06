@@ -66,7 +66,7 @@ A **Commenter** cannot exist on it's own. It belongs to a [**Comment**](#comment
 
 Kommentar does not require you to authenticate users. As a commenting system that relies on the [**Host**](#host), I did not see the need to handle authentication in the application itself. If you choose to authenticate users, you can do so in your application and inject the user details into the `Commenter` object.
 
-This does mean that you will need to handle session management yourself. More about this is explained in the [User Sessions](/docs/reference/03-auth#user-sessions) section.
+This does mean that you will need to handle session management yourself. More about this is explained in the [User Sessions](/reference/03-auth#user-sessions) section.
 
 ```typescript
 type Commenter = {

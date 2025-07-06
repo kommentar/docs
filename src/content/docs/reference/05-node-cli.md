@@ -19,7 +19,7 @@ The script at it's current state is a simple `.ts` file that uses Node's built-i
 
 The following scripts are available:
 
-- `pnpm manage`: This script is used to manage the [**Consumer**](/docs/reference/02-core-concepts#consumer)s.
+- `pnpm manage`: This script is used to manage the [**Consumer**](/reference/02-core-concepts#consumer)s.
 - `pnpm setup:admin`: This script is used to set up the admin user's API key and secret. This is a one-time setup script that you should run after deploying Kommentar for the first time.
 
 There are other "dev" scripts that I created to help me do some stuff, but they don't really provide any value to you as a user of Kommentar. You can find them in the [`package.json`](https://github.com/kommentar/kommentar/tree/main/package.json) file if you want to have a look.
@@ -32,7 +32,7 @@ There are two ways to execute the scripts in the [Available Scripts](#available-
    ```bash
    pnpm manage
    ```
-2. **Using `docker exec`**: If you are running Kommentar in a Docker container (as outlined in the [Deploy with Docker](/docs/deploy/01-self-host#docker)), you can execute the scripts inside the container using `docker exec`. For example, to manage consumers, you can run:
+2. **Using `docker exec`**: If you are running Kommentar in a Docker container (as outlined in the [Deploy with Docker](/deploy/01-self-host#docker)), you can execute the scripts inside the container using `docker exec`. For example, to manage consumers, you can run:
 
    ```bash
    docker exec -it kommentar-app-1 pnpm manage

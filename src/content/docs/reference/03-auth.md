@@ -9,14 +9,14 @@ Kommentar is consumed by other application via an HTTP API, and these applicatio
 
 This part of the documentation will explain how Kommentar handles the following:
 
-- Authentication of [**Consumers**](/docs/reference/02-core-concepts#consumer)
-- Authorization of [**Consumers**](/docs/reference/02-core-concepts#consumer)
+- Authentication of [**Consumers**](/reference/02-core-concepts#consumer)
+- Authorization of [**Consumers**](/reference/02-core-concepts#consumer)
 - User sessions
 - Admin/Superuser access
 
 ## Authentication
 
-Kommentar uses a simple API key based authentication system. Each [**Consumer**](/docs/reference/02-core-concepts#consumer) has a unique API key and secret that is used to authenticate requests. Here's how an example request might look like.
+Kommentar uses a simple API key based authentication system. Each [**Consumer**](/reference/02-core-concepts#consumer) has a unique API key and secret that is used to authenticate requests. Here's how an example request might look like.
 
 ```shell
 curl http://localhost:3000/hosts/e3251fe5-9401-4ee0-a15e-9b3a72ef4904/comments \
@@ -47,9 +47,9 @@ The API key is something that is needed in conjuction with the API secret to aut
 
 Authorization in Kommentar is not too complex. Some might even say it is too simple to be considered authorization.
 
-Kommentar does not have a concept of roles or permissions. Instead, it uses a simple allowlist approach. Each [**Consumer**](/docs/reference/02-core-concepts#consumer) is allowed to perform certain actions on certain resources.
+Kommentar does not have a concept of roles or permissions. Instead, it uses a simple allowlist approach. Each [**Consumer**](/reference/02-core-concepts#consumer) is allowed to perform certain actions on certain resources.
 
-To be more specific, each [**Consumer**](/docs/reference/02-core-concepts#consumer) is allowed to access and perform action only a specific list of [**Hosts**](/docs/reference/02-core-concepts#host). The granularity of this access is at the [**Host**](/docs/reference/02-core-concepts#host) level, and not at an operation level. If this does not make sense, have a gander at the example below.
+To be more specific, each [**Consumer**](/reference/02-core-concepts#consumer) is allowed to access and perform action only a specific list of [**Hosts**](/reference/02-core-concepts#host). The granularity of this access is at the [**Host**](/reference/02-core-concepts#host) level, and not at an operation level. If this does not make sense, have a gander at the example below.
 
 ### Example
 
@@ -72,23 +72,23 @@ const consumer: Consumer = {
 };
 ```
 
-In this example, the `consumer` is allowed to access only the first two [**Hosts**](/docs/reference/02-core-concepts#host) in the `allHosts` array. If the `consumer` tries to access the third [**Host**](/docs/reference/02-core-concepts#host), the request will be rejected.
+In this example, the `consumer` is allowed to access only the first two [**Hosts**](/reference/02-core-concepts#host) in the `allHosts` array. If the `consumer` tries to access the third [**Host**](/reference/02-core-concepts#host), the request will be rejected.
 
-This also means that for the first two [**Hosts**](/docs/reference/02-core-concepts#host), the `consumer` can perform ANY action that is allowed by the API. This includes retrieving, posting, updating and deleting [**Comments**](/docs/reference/02-core-concepts#comment). There is no granularity in the actions that can be performed on a [**Host**](/docs/reference/02-core-concepts#host).
+This also means that for the first two [**Hosts**](/reference/02-core-concepts#host), the `consumer` can perform ANY action that is allowed by the API. This includes retrieving, posting, updating and deleting [**Comments**](/reference/02-core-concepts#comment). There is no granularity in the actions that can be performed on a [**Host**](/reference/02-core-concepts#host).
 
 ## User Sessions
 
 Kommentar leverages the concept of user sessions, but it does not handle validation or management of these sessions.
 
-The idea is that Kommentar will provide a way to associate a user session with a [**Comment**](/docs/reference/02-core-concepts#comment) when the comment is posted. This allows you to track which user made which comment, without Kommentar having to manage user sessions itself. There are drawbacks to this approach for sure, but it is a trade-off that I am willing to make for now. If enough people ask for a better solution, I will consider implementing a more robust system, but nothing to the extreme of a full-fledged user management system.
+The idea is that Kommentar will provide a way to associate a user session with a [**Comment**](/reference/02-core-concepts#comment) when the comment is posted. This allows you to track which user made which comment, without Kommentar having to manage user sessions itself. There are drawbacks to this approach for sure, but it is a trade-off that I am willing to make for now. If enough people ask for a better solution, I will consider implementing a more robust system, but nothing to the extreme of a full-fledged user management system.
 
 The user session in Kommentar is expected to be a `string`. No other enforcements are made on the session ID. It is up to you to ensure that the session ID is valid.
 
 ### How the Session ID is used
 
-When a new [**Comment**](/docs/reference/02-core-concepts#comment) is created, the session ID is passed in the cookie header of the request. Kommentar will then associate the session ID with the [**Comment**](/docs/reference/02-core-concepts#comment) and store it.
+When a new [**Comment**](/reference/02-core-concepts#comment) is created, the session ID is passed in the cookie header of the request. Kommentar will then associate the session ID with the [**Comment**](/reference/02-core-concepts#comment) and store it.
 
-When updating or deleting a [**Comment**](/docs/reference/02-core-concepts#comment), the session ID is also passed in the cookie header. Kommentar will then check if the session ID matches the one associated with the [**Comment**](/docs/reference/02-core-concepts#comment) and allow or deny the request accordingly.
+When updating or deleting a [**Comment**](/reference/02-core-concepts#comment), the session ID is also passed in the cookie header. Kommentar will then check if the session ID matches the one associated with the [**Comment**](/reference/02-core-concepts#comment) and allow or deny the request accordingly.
 
 Session IDs are not returned in any of the API responses to ensure that they are not exposed to the client. This is to prevent any potential security issues that could arise from exposing session IDs in the API responses. This does mean that you (a user of Kommentar) will have to use your own session management system to handle user sessions and ensure that the session ID is valid.
 
