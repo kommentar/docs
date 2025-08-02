@@ -1,0 +1,4 @@
+{
+  "pages": ["index", "core-concepts", "under-the-hood", "api"],
+  "defaultOpen": true
+}
