@@ -1,5 +1,5 @@
 {
   "title": "Self Host",
-  "pages": ["introduction", "docker"],
+  "pages": ["introduction", "docker-compose", "docker"],
   "defaultOpen": true
 }

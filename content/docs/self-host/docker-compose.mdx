@@ -1,0 +1,193 @@
+---
+title: Deploy with Docker Compose
+description: Guide to deploy Kommentar via Docker Compose
+---
+
+<Callout title="Docker Images">
+    - **Core**: `ghcr.io/kommentar/kommentar`
+    - **Admin Console**: `ghcr.io/kommentar/admin-console`
+</Callout>
+
+## Prerequisites
+
+- Make sure you have Docker and Docker Compose installed and set up on the machine where you will host Kommentar.
+  - [Install Docker](https://docs.docker.com/engine/install/)
+  - [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+## Setup
+
+With Docker Compose, the setup is fairly simple.
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Create the `docker-compose.yaml`</h4>
+      <span>This compose file will handle setting up the core app, admin console and a Postgres server for you. Make sure to update any and all values in the file.</span>
+      ```yaml
+      services:
+        postgres:
+          image: postgres:latest
+          container_name: kommentar-postgres
+          environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+          ports:
+            - "5432:5432"
+          volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+          restart: unless-stopped
+          healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+        core:
+            image: ghcr.io/kommentar/kommentar:latest
+            pull_policy: always
+            container_name: kommentar-core
+            ports:
+                - "3000:3000"
+            env_file:
+                - .env.core
+            restart: unless-stopped
+        admin-console:
+          image: ghcr.io/kommentar/admin-console:latest
+          pull_policy: always
+          container_name: kommentar-admin-console
+          ports:
+            - "3001:3000"
+          env_file:
+            - .env.admin-console
+          restart: unless-stopped
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Create the environment variable file for the Core Application</h4>
+      ```sh title=".env.core"
+      PORT=3000
+      POSTGRES_HOST=127.0.0.1
+      POSTGRES_PORT=5432
+      POSTGRES_DATABASE=postgres
+
+      NODE_ENV=development # development, production, test
+      PRODUCTION_API_SERVER_URL=https://kommentar.example.com
+
+      # Secrets (only if using env adapter for secret store)
+      POSTGRES_USER=postgres
+      POSTGRES_PASSWORD=password
+
+      ADMIN_KEY=km_1234567890abcdef1234567890abcdef
+      ADMIN_SECRET_HASH=1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+      ```
+      <Callout title="Note about Admin Key and Secret">
+        For now, you can ignore filling in values for the `ADMIN_KEY` and `ADMIN_SECRET_HASH` variables. This will be tackled after the setup.
+      </Callout>
+  </div>
+  <div className="fd-step">
+      <h4>Create the environment variable file for the Admin Console</h4>
+      ```sh title=".env.admin-console"
+      NUXT_ADMIN_API_BASE_URL='https://kommentar.example.com/super'
+      NUXT_ADMIN_KEY=''
+      NUXT_ADMIN_SECRET=''
+      NUXT_SESSION_SECRET='256-bit-secret-to-sign-tokens'
+      ```
+      <Callout title="Note about Admin credentials">
+        For now, you can ignore filling in values for the `NUXT_ADMIN_KEY` and `NUXT_ADMIN_SECRET` variables. This will be tackled after the setup.
+      </Callout>
+  </div>
+  <div className="fd-step">
+      <h4>Run everything</h4>
+      ```sh
+      docker compose up -d
+      # OR
+      docker-compose up -d
+      ```
+      <Callout title="Note about Admin credentials">
+        For now, you can ignore filling in values for the `NUXT_ADMIN_KEY` and `NUXT_ADMIN_SECRET` variables. This will be tackled after the setup.
+      </Callout>
+  </div>
+</div>
+
+## Post Setup
+
+Verify that the containers are running:
+
+```bash
+docker ps
+```
+
+You should see all the Kommentar containers in the list.
+
+**Make sure to take note of the container names for the Core Application and Admin Console.**
+
+Now is a good time to set up the admin user for Kommentar. You can do this by following these steps:
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Run the script to generate admin credentials</h4>
+      <span>Make sure to use the correct container name.</span>
+      ```sh
+      docker exec -it kommentar-core pnpm setup:admin
+      ```
+
+      <span>This will generate the credentials for the admin user. The output will look like this:</span>
+
+      ```
+      🔐 Admin credentials generated!
+
+      Add these to your environment variables:
+      ADMIN_KEY=km_f0b0633329feb55f43344d92d7361776
+      ADMIN_SECRET_HASH=8162ab4d6fc4c54270634d5bfaf8e2e45835313568b85a23888fb0ecde46a0e8
+
+      ⚠️  IMPORTANT: Save the plain secret below - it won't be shown again!
+      Admin API Secret (plain): 81a6fa20c25747dd3230aac84f0a47a85a25562677e2313471f3e8f9316dd158
+      🔄 Remember to restart your server after setting the environment variables!
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Populate your `.env.core` file</h4>
+      <span>Copy the values of `ADMIN_KEY` and `ADMIN_SECRET_HASH` to your `.env.core` file. Make sure to store the **Admin API Secret (plain)** in a secure place, as it will not be shown again, and is needed when sending requests to Kommentar's API as well as for the Admin Console.</span>
+  </div>
+  <div className="fd-step">
+      <h4>Populate your `.env.admin-console` file</h4>
+      <span>Copy the values of `ADMIN_KEY` and **Admin API Secret (plain)** to your `.env.admin-console` file.</span>
+  </div>
+  <div className="fd-step">
+      <h4>Apply the changes</h4>
+      <span>Restart the containers</span>
+      ```sh
+      docker compose restart
+      # OR
+      docker-compose restart
+      ```
+  </div>
+</div>
+
+## Upgrading
+
+Upgrading Kommentar is straightforward as long as you do not change the database schema or the code.
+
+To make sure you always pull the latest image when running the compose file, add the following to your compose file:
+
+```yaml title="docker-compose.yaml"
+services:
+  postgres:
+    # no changes needed
+  core:
+    image: ghcr.io/kommentar/kommentar:latest
+    pull_policy: always
+    # everything else remains unchanged
+  admin-console:
+    image: ghcr.io/kommentar/admin-console:latest
+    pull_policy: always
+    # everything else remains unchanged
+```
+
+Once you have made this change, you can simply run the following command:
+
+```sh
+docker compose up -d --force-recreate
+# OR
+docker-compose up -d --force-recreate
+```
