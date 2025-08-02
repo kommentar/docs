@@ -1,0 +1,234 @@
+---
+title: Deploy with Docker
+description: Guide to deploy Kommentar via Docker
+---
+
+<Callout title="Docker Images">
+    - **Core**: `ghcr.io/kommentar/kommentar`
+    - **Admin Console**: `ghcr.io/kommentar/admin-console`
+</Callout>
+
+The following guide will handle deploying the Core application and Admin Console separately.
+
+## Prerequisites
+
+- Make sure you have Docker installed and set up on the machine where you will host Kommentar. ([Documentation](https://docs.docker.com/engine/install/))
+- Make sure you have a Postgres server up and running as well. This will not be covered in this guide.
+
+## Core Application
+
+Create a `.env` file with the necessary environment variables. Use [this file](https://github.com/kommentar/kommentar/blob/main/.env.sample) as a reference.
+<Callout title="Note about Admin Key and Secret">
+  For now, you can ignore filling in values for the `ADMIN_KEY` and `ADMIN_SECRET_HASH` variables. This will be tackled after the setup.
+</Callout>
+
+### Setup
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Pull the image</h4>
+      ```sh
+      docker pull ghcr.io/kommentar/kommentar:latest
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Create the environment variables file</h4>
+      <span>Use [this file](https://github.com/kommentar/kommentar/blob/main/.env.sample) as a template for creating your own `.env` file.</span>
+      <Callout title="Note about Admin Key and Secret">
+        For now, you can ignore filling in values for the `ADMIN_KEY` and `ADMIN_SECRET_HASH` variables. This will be tackled after the setup.
+      </Callout>
+  </div>
+  <div className="fd-step">
+      <h4>Create and run the container</h4>
+      <span>Make sure to bind the correct port if you changed it in your `.env`.</span>
+      ```sh
+      docker run -d \
+        -p 3000:3000 \
+        --env-file .env \
+        --name kommentar-core \
+        ghcr.io/kommentar/kommentar:latest
+      ```
+  </div>
+</div>
+
+### Post Setup
+
+Verify that the container is running:
+
+```bash
+docker ps
+```
+
+You should see a container named `kommentar-core` or similar.
+
+Now is a good time to set up the admin user for Kommentar. You can do this by following these steps:
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Run the script to generate admin credentials</h4>
+      <span>Make sure to use the correct container name.</span>
+      ```sh
+      docker exec -it kommentar-core pnpm setup:admin
+      ```
+
+      <span>This will generate the credentials for the admin user. The output will look like this:</span>
+
+      ```
+      🔐 Admin credentials generated!
+
+      Add these to your environment variables:
+      ADMIN_KEY=km_f0b0633329feb55f43344d92d7361776
+      ADMIN_SECRET_HASH=8162ab4d6fc4c54270634d5bfaf8e2e45835313568b85a23888fb0ecde46a0e8
+
+      ⚠️  IMPORTANT: Save the plain secret below - it won't be shown again!
+      Admin API Secret (plain): 81a6fa20c25747dd3230aac84f0a47a85a25562677e2313471f3e8f9316dd158
+      🔄 Remember to restart your server after setting the environment variables!
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Populate your `.env` file</h4>
+      <span>Copy the values of `ADMIN_KEY` and `ADMIN_SECRET_HASH` to your `.env` file. Make sure to store the **Admin API Secret (plain)** in a secure place, as it will not be shown again, and is needed when sending requests to Kommentar's API.</span>
+  </div>
+  <div className="fd-step">
+      <h4>Apply the changes</h4>
+      <span>Restart the container</span>
+      ```sh
+      docker stop kommentar-core
+      docker rm kommentar-core
+      docker run -d -p 3000:3000 --env-file .env --name kommentar-core ghcr.io/kommentar/kommentar:latest
+      ```
+      <span>A recreation of the container is necessary to make sure the updated `.env` file is used.</span>
+  </div>
+</div>
+
+Setting up Kommentar for public access requires an additional step of configuring a reverse proxy, such as Nginx or Traefik, to handle incoming requests and route them to the Kommentar container.
+
+This is not covered in this guide, but you can find many resources online on how to set up a reverse proxy. Some popular options include:
+
+- [Nginx](https://www.nginx.com/)
+- [Traefik](https://traefik.io/)
+- [Caddy](https://caddyserver.com/)
+
+### Upgrading
+
+Upgrading Kommentar is straightforward as long as you do not change the database schema or the code.
+
+To upgrade Kommentar, you can follow these steps:
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Pull the latest image</h4>
+      ```sh
+      docker pull ghcr.io/kommentar/kommentar:latest
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Update the environment variables file if needed</h4>
+      <span>Make sure to look at the release notes, or [this file](https://github.com/kommentar/kommentar/blob/main/.env.sample) to see if you need to update the `.env` file.</span>
+  </div>
+  <div className="fd-step">
+      <h4>Stop the old container</h4>
+      ```sh
+      docker stop kommentar-core
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Create and run the container</h4>
+      <span>Make sure to bind the correct port if you changed it in your `.env`.</span>
+      ```sh
+      docker run -d \
+        -p 3000:3000 \
+        --env-file .env \
+        --name kommentar-core \
+        ghcr.io/kommentar/kommentar:latest
+      ```
+  </div>
+</div>
+
+
+## Admin Console
+
+Create a `.env` file with the necessary environment variables. Use [this file](https://github.com/kommentar/admin-console/blob/main/.env.example) as a reference.
+
+### Setup
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Pull the image</h4>
+      ```sh
+      docker pull ghcr.io/kommentar/admin-console:latest
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Create the environment variables file</h4>
+      <span>Use [this file](https://github.com/kommentar/admin-console/blob/main/.env.example) as a template for creating your own `.env` file.</span>
+      <Callout title="Credentials">
+          Make sure to use the **Admin API Secret (plain)** from the Core Application [Post Setup](#post-setup) for the `ADMIN_SECRET_HASH` environment variable.
+      </Callout>
+  </div>
+  <div className="fd-step">
+      <h4>Create and run the container</h4>
+      <span>Make sure to bind the correct port if you changed it in your `.env`.</span>
+      ```sh
+      docker run -d \
+        -p 3001:3000 \
+        --env-file .env \
+        --name kommentar-admin-console \
+        ghcr.io/kommentar/admin-console:latest
+      ```
+  </div>
+</div>
+
+### Post Setup
+
+Verify that the container is running:
+
+```bash
+docker ps
+```
+
+You should see a container named `kommentar-admin-console` or similar.
+
+Setting up the Admin Console for public access requires an additional step of configuring a reverse proxy, such as Nginx or Traefik, to handle incoming requests and route them to the Kommentar container.
+
+This is not covered in this guide, but you can find many resources online on how to set up a reverse proxy. Some popular options include:
+
+- [Nginx](https://www.nginx.com/)
+- [Traefik](https://traefik.io/)
+- [Caddy](https://caddyserver.com/)
+
+### Upgrading
+
+Upgrading the Admin Console is straightforward as long as you do not change the code.
+
+To upgrade, you can follow these steps:
+
+<div className="fd-steps">
+  <div className="fd-step">
+      <h4>Pull the latest image</h4>
+      ```sh
+      docker pull ghcr.io/kommentar/admin-console:latest
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Update the environment variables file if needed</h4>
+      <span>Make sure to look at the release notes, or [this file](https://github.com/kommentar/admin-console/blob/main/.env.example) to see if you need to update the `.env` file.</span>
+  </div>
+  <div className="fd-step">
+      <h4>Stop the old container</h4>
+      ```sh
+      docker stop kommentar-admin-console
+      ```
+  </div>
+  <div className="fd-step">
+      <h4>Create and run the container</h4>
+      <span>Make sure to bind the correct port if you changed it in your `.env`.</span>
+      ```sh
+      docker run -d \
+        -p 3001:3000 \
+        --env-file .env \
+        --name kommentar-admin-console \
+        ghcr.io/kommentar/admin-console:latest
+      ```
+  </div>
+</div>

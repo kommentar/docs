@@ -1,4 +1,12 @@
 {
-  "pages": ["index", "core-concepts", "under-the-hood", "api"],
+  "pages": [
+    "index",
+    "---Reference---",
+    "core-concepts",
+    "under-the-hood",
+    "api",
+    "---Deployment---",
+    "self-host"
+  ],
   "defaultOpen": true
 }

@@ -1,0 +1,26 @@
+---
+title: Introduction
+description: Learn how to self host Kommentar
+---
+
+import { ContainerIcon, GithubIcon } from 'lucide-react';
+
+Kommentar is built to be self-hostable first and foremost. Running Kommentar on your own server gives you full control over your data.
+
+<Callout type="warning" title="Note">
+    As long as you do not change anything in the database schema, or the code, Kommentar can be upgraded without data loss.
+</Callout>
+
+Kommentar can be deployed on your infrastructure with one of the following approaches. Click on any of the cards to read more.
+
+<Cards>
+  <Card title="Deploy via Docker Compose" href="/self-host/docker-compose" icon={<ContainerIcon />} className="border-2 border-fd-primary">
+    <strong className="text-fd-primary">RECOMMENDED</strong>
+  </Card>
+  <Card title="Deploy via Docker" href="/self-host/docker" icon={<ContainerIcon />}>
+    Harder to maintain in my opinion, but you do you mate
+  </Card>
+  <Card title="Build from Source" href="/self-host/build-from-source" icon={<GithubIcon />}>
+      Why even
+  </Card>
+</Cards>
