@@ -1,0 +1,4 @@
+{
+  "pages": ["entities", "auth"],
+  "defaultOpen": true
+}
