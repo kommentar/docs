@@ -1,0 +1,5 @@
+{
+  "title": "HTTP API",
+  "pages": ["reference", "openapi-spec"],
+  "defaultOpen": true
+}

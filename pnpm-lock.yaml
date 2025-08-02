@@ -17,6 +17,9 @@ importers:
       fumadocs-ui:
         specifier: 15.6.7
         version: 15.6.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(next@15.4.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(tailwindcss@4.1.11)
+      lucide-react:
+        specifier: ^0.536.0
+        version: 0.536.0(react@19.1.1)
       next:
         specifier: 15.4.4
         version: 15.4.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -2167,6 +2170,11 @@ packages:
   lru-cache@11.1.0:
     resolution: {integrity: sha512-QIXZUBJUx+2zHUdQujWejBkcD9+cs94tLn0+YL8UrCh+D5sCXZ4c7LaEH48pNwRY3MLDgqUFyhlCyjJPf1WP0A==}
     engines: {node: 20 || >=22}
+
+  lucide-react@0.536.0:
+    resolution: {integrity: sha512-2PgvNa9v+qz4Jt/ni8vPLt4jwoFybXHuubQT8fv4iCW5TjDxkbZjNZZHa485ad73NSEn/jdsEtU57eE1g+ma8A==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -5275,6 +5283,10 @@ snapshots:
       js-tokens: 4.0.0
 
   lru-cache@11.1.0: {}
+
+  lucide-react@0.536.0(react@19.1.1):
+    dependencies:
+      react: 19.1.1
 
   magic-string@0.30.17:
     dependencies:
