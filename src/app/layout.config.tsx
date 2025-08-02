@@ -1,4 +1,6 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import Logo from './assets/kommentar-logo.png';
+import Image from 'next/image';
 
 /**
  * Shared layout configurations
@@ -11,6 +13,7 @@ export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
       <>
+        <Image src={Logo.src} alt='Kommentar Logo' width={25} height={25} />
         <h1 className='text-fd-primary'>Kommentar</h1>
       </>
     ),
