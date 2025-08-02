@@ -1,0 +1,143 @@
+---
+title: Entities
+description: Information about entities in Kommentar
+---
+
+<Callout>All the code blocks on this page are written in TypeScript</Callout>
+
+## Comment
+
+A Comment is the entity that describes a comment made by a user on a [Host](#host).
+
+A Comment cannot exist on it’s own. It belongs to a [Host](#host).
+
+It’s defined as an object with some properties that allow you to manage them.
+
+```ts
+type Comment = {
+  id: string;
+  content: string;
+  hostId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  sessionId: string;
+  commenter: Commenter;
+};
+```
+
+You can look at the actual definition in the code [here](https://github.com/kommentar/kommentar/blob/main/src/app/domain/entities/comment.ts).
+
+The model of a Comment is simple, and I do not expect it to change much in the future. If there are any changes, I will do my best to keep them backwards compatible.
+
+## Commenter
+
+A Commenter is the entity that describes the user who posted a [Comment](#comment).
+
+A Commenter cannot exist on it’s own. It belongs to a [Comment](#comment).
+
+Kommentar does not require you to authenticate users. As a commenting system that relies on the [Host](#host), I did not see the need to handle authentication in the application itself. If you choose to authenticate users, you can do so in your application and inject the user details into the `Commenter` object.
+
+This does mean that you will need to handle session management yourself. More about this is explained in the [User Sessions]() section.
+
+```ts
+type Commenter = {
+  displayName: string;
+  realName: string;
+};
+```
+
+You can look at the actual definition in the code [here](https://github.com/kommentar/kommentar/blob/main/src/app/domain/entities/comment.ts).
+
+## Host
+
+A Host is the parent of the [Comment](#comment). A [Comment](#comment) cannot exist by itself. It has to belong to a Host.
+
+Consider these examples:
+- On a blog site, each blog post is a separate Host.
+- On GitHub, a PR, issue, or Discussion can be Hosts.
+- On a site like BlueSky, a post is a Host.
+- On YouTube, a video is the Host.
+
+Essentially, [Comments](#comment) are scoped to a particular entity. This entity is what I prefer to call a Host.
+
+A Host is identified by a unique identifier called the `hostId`.
+
+Following the same examples as above:
+- On a blog site, the blog post’s slug could be the `hostId`
+- On GitHub, the PR number could be the `hostId`
+- On BlueSky, the post’s ID could be the `hostId`
+- On YouTube, the video’s ID could be the `hostId`
+
+
+## Consumer
+
+A Consumer is the entity that consumes the Kommentar API. It can be a web application, a mobile app, or any other service that simply uses the API. It's pretty much the same thing as a tenant.
+
+A Consumer is identified by a unique identifier. There is some level of granularity in how much access a particular Consumer has to the API, but it’s nothing too complex.
+
+<Callout>
+  You might ask yourself how this is “no authentication”. The reason is that Kommentar does not require you to authenticate users. It only requires you to authenticate the application that is consuming the API.
+
+  This is done using an API key and secret that you can generate for each Consumer.
+</Callout>
+
+```ts
+type Consumer = {
+  id: string;
+  name: string;
+  description: string;
+  apiKey: string;
+  apiSecret: string;
+  allowedHosts: string[] | [];
+  isActive: boolean;
+  rateLimit: number; // The number of requests allowed per minute
+};
+```
+
+You can look at the actual definition in the code [here](https://github.com/kommentar/kommentar/blob/main/src/app/domain/entities/consumer.ts).
+
+### Allowed Hosts
+
+<Callout>
+    I plan to revisit the following implementation very soon to make it easier to use Kommentar.
+</Callout>
+
+Each consumer has a set of [Hosts](#host) that it can access. Consider the following examples for a better understanding.
+
+Let's assume we have a Consumer for your blog at `blog.example.com`. Your blog has 10 posts with the slugs `post-01`, `post-02`, `post-03`, all the way to `post-10`.
+
+To make sure the consumer has access to these posts, all the hosts need to be added to the `allowedHosts` property. With that in mind, this is what the consumer will look like:
+
+```ts
+const exampleConsumer: Consumer = {
+  id: "2a046a0d-bf02-4323-a626-a806782f5a79";
+  name: "blog.example.com";
+  description: "Example consumer for blog.example.com";
+  apiKey: "km_2e316362710c09370e6157b0086271cd";
+  apiSecret: "f30f413615c993e26ffdafddc18af7f464312d2e665b26235da573867b61b610";
+  allowedHosts: [
+    "post-01",
+    "post-02",
+    "post-03",
+    "post-04",
+    "post-05",
+    "post-06",
+    "post-07",
+    "post-08",
+    "post-09",
+    "post-10"
+  ];
+  isActive: true;
+  rateLimit: 100;
+};
+```
+
+Now you might think this is very tedious to maintain because every time there is a new blog post, you will have to update the `allowedHosts` list. That is a very valid concern, but I made this decision to make it explicit which consumer has access to which host.
+
+## Admin / Super
+
+A Super is essentially an admin user of the Kommentar application. It bypasses all restrictions and has access to all the data in the application.
+
+The terms Super, Superuser, and Admin are synonymous in the context of Kommentar.
+
+Technically speaking, a Super is not a domain entity in Kommentar. It’s more of a user that has superuser privileges in the application.
